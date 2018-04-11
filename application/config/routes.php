@@ -1,10 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$route['hello'] = 'Test/bonjourSimple';
-$route['test/bonjourAvecParametre'] = 'test/bonjourAvecParametre';
-$route['test/(:any)'] = 'Test/saisieNom';
-$route['default_controller'] = 'Test/saisieNom';
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
@@ -53,5 +49,6 @@ $route['default_controller'] = 'Test/saisieNom';
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
+$route['default_controller'] = 'Visiteur/Home';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

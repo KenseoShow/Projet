@@ -1,7 +1,8 @@
 <h2><?php echo $TitreDeLaPage ?></h2>
 <?php echo validation_errors();
-echo form_open('administrateur/ajouterUnArticle') ?>
-<label for="txtTitre">Titre de l'article</label>
+
+echo form_open('visiteur/ajouterUnArticle') ?>
+<label for="txtTitre">Libelle de l'article</label>
 <input type="input" name="txtTitre" value="<?php echo set_value('txtTitre'); ?>" /><br/>
 <label for="txtTexte">Texte de l'article</label>
 <textarea name="txtTexte" value="<?php echo set_value('txtTexte'); ?>"></textarea><br/>
