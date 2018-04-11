@@ -19,9 +19,27 @@ $this->load->database();
         return $requete->row_array(); // retour d'un tableau associatif
      } // fin retournerArticles
 
-     public function insererUnArticle($pDonneesAInserer)
+     public function insererUneMarque($pDonneesAInserer)
      {
-         return $this->db->insert('produit', $pDonneesAInserer);
-     } // insererUnArticle
+         return $this->db->insert('marque', $pDonneesAInserer);
+     } // insererUneMarque
+
+     public function insererUneCategorie($pDonneesAInserer)
+     {
+         return $this->db->insert('categorie', $pDonneesAInserer);
+     } // insererUneCatégorie
+
+     public function RechercherUnArticle($pNomArticle)
+     {
+        if ($pNomArticle === FALSE) // pas de n° d'article en paramètre
+        {  // on retourne tous les articles
+
+             $requete = $this->db->get('produit');
+             return $requete->result_array(); // retour d'un tableau associatif
+        }
+        $requete = $this->db->get_where('produit', array('LIBELLE' => $pNomArticle));
+        return $requete->row_array(); // retour d'un tableau associatif
+    
+     } //RechercherUnProduit
 
 } // Fin Classe

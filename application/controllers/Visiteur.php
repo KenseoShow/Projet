@@ -5,9 +5,9 @@ class Visiteur extends CI_Controller
    {
       parent::__construct();
       $this->load->helper('url');
-      $this->load->helper('assets'); // helper 'assets' ajouté a Application
+      $this->load->helper('assets');
       $this->load->library("pagination");
-      $this->load->model('ModeleArticle'); // chargement modèle, obligatoire
+      $this->load->model('ModeleArticle');
       //$this->load->model('ModeleUtilisateur');
    } // __construct
 
@@ -19,7 +19,7 @@ class Visiteur extends CI_Controller
     $this->load->view('templates/PiedDePage');
    }// Page d'acceuil
 
-   public function listerLesArticles() // lister tous les articles
+   public function listerLesArticles()
    {
       $DonneesInjectees['lesArticles'] = $this->ModeleArticle->retournerArticles();
       $DonneesInjectees['TitreDeLaPage'] = 'Tous les articles';
@@ -28,7 +28,7 @@ class Visiteur extends CI_Controller
       $this->load->view('templates/PiedDePage');
    } // listerLesArticles
 
-   public function voirUnArticle($noArticle = NULL) // valeur par défaut de noArticle = NULL
+   public function voirUnArticle($noArticle = NULL)
    {
      $DonneesInjectees['unArticle'] = $this->ModeleArticle->retournerArticles($noArticle);
      if (empty($DonneesInjectees['unArticle']))
@@ -36,12 +36,68 @@ class Visiteur extends CI_Controller
          show_404();
      }
      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unArticle']['LIBELLE'];
-     // ci-dessus, entrée ['cTitre'] de l'entrée ['unArticle'] de $DonneesInjectees
      $this->load->view('templates/Entete');
      $this->load->view('visiteur/VoirUnArticle', $DonneesInjectees);
      $this->load->view('templates/PiedDePage');
    } // voirUnArticle
 
-   
+   public function ListeArticleRechercher()
+   { 
+     $DonneesInjectees['ArticleRechercher'] = $this->ModeleArticle->RechercherUnArticle($NomArticle);
+     $DonneesInjectees['TitreDeLaPage'] = 'Resultats de votre recherche';
+     $this->load->view('templates/Entete');
+     $this->load->view('Visiteur/ListeArticleRechercher', $DonneesInjectees);
+     $this->load->view('templates/PiedDePage');
+   } // RechercherUnArticle
+
+   public function ajouterUneMarque()
+  {
+      $this->load->helper('form');
+      $this->load->library('form_validation');
+      $DonneesInjectees['TitreDeLaPage'] = 'Ajouter une marque';
+      $this->form_validation->set_rules('NoMarque', 'NumeroMarque', 'required');
+      $this->form_validation->set_rules('NomMarque', 'Marque', 'required');
+      if ($this->form_validation->run() === FALSE)
+      {   // formulaire non validé, on renvoie le formulaire
+        $this->load->view('templates/Entete');
+        $this->load->view('Visiteur/ajouterUneMarque', $DonneesInjectees);
+        $this->load->view('templates/PiedDePage');
+      }
+      else
+      {
+        $donneesAInserer = array(
+        'NOMARQUE' => $this->input->post('NoMarque'),
+        'NOM' => $this->input->post('NomMarque'),
+        ); // NOMARQUE, NOM : champs de la table tabarticle
+        $this->ModeleArticle->insererUneMarque($donneesAInserer); // appel du modèle
+        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('Visiteur/insertionMarqueReussie');
+      }
+  } // ajouterUneMarque
+
+  public function ajouterUneCategorie()
+  {
+      $this->load->helper('form');
+      $this->load->library('form_validation');
+      $DonneesInjectees['TitreDeLaPage'] = 'Ajouter une catégorie';
+      $this->form_validation->set_rules('NoCategorie', 'NumeroCategorie', 'required');
+      $this->form_validation->set_rules('NomCategorie', 'Categorie', 'required');
+      if ($this->form_validation->run() === FALSE)
+      {   // formulaire non validé, on renvoie le formulaire
+        $this->load->view('templates/Entete');
+        $this->load->view('Visiteur/ajouterUneCategorie', $DonneesInjectees);
+        $this->load->view('templates/PiedDePage');
+      }
+      else
+      {
+        $donneesAInserer = array(
+        'NOCATEGORIE' => $this->input->post('NoCategorie'),
+        'LIBELLE' => $this->input->post('NomCategorie'),
+        ); // NOCATEGORIE, LIBELLE : champs de la table tabarticle
+        $this->ModeleArticle->insererUneCategorie($donneesAInserer); // appel du modèle
+        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('Visiteur/insertionCategorieReussie');
+      }
+  } // ajouterUneCatégorie
 
 }  // Visiteur
