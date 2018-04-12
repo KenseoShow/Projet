@@ -29,17 +29,16 @@ $this->load->database();
          return $this->db->insert('categorie', $pDonneesAInserer);
      } // insererUneCatégorie
 
-     public function RechercherUnArticle($pNomArticle)
+     public function RechercherUnArticle($pLibelle)
      {
-        if ($pNomArticle === FALSE) // pas de n° d'article en paramètre
+        if ($pLibelle === FALSE) // pas de nom d'article en paramètre
         {  // on retourne tous les articles
 
              $requete = $this->db->get('produit');
              return $requete->result_array(); // retour d'un tableau associatif
         }
-        $requete = $this->db->get_where('produit', array('LIBELLE' => $pNomArticle));
+        $requete = $this->db->get_where('produit', array('LIBELLE' => $pLibelle));
         return $requete->row_array(); // retour d'un tableau associatif
-    
      } //RechercherUnProduit
 
 } // Fin Classe

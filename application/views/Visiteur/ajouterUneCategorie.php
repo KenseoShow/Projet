@@ -7,7 +7,7 @@ echo form_open('Visiteur/ajouterUneCategorie') ?>
 <input type="input" name="NoCategorie" value="<?php echo set_value('NoCategorie'); ?>" /><br/>
 
 <label for="NomCategorie">Catégorie</label>
-<input type="input" name="NomCategorie" value="<?php echo set_value('Categorie'); ?>"/><br/>
+<input type="input" name="NomCategorie" value="<?php echo set_value('NomCategorie'); ?>"/><br/>
 
 <input type="submit" name="submit" value="Ajouter une Catégorie" />
 </form>

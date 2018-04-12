@@ -41,14 +41,22 @@ class Visiteur extends CI_Controller
      $this->load->view('templates/PiedDePage');
    } // voirUnArticle
 
-   public function ListeArticleRechercher()
+   public function Rechercher()
    { 
-     $DonneesInjectees['ArticleRechercher'] = $this->ModeleArticle->RechercherUnArticle($NomArticle);
-     $DonneesInjectees['TitreDeLaPage'] = 'Resultats de votre recherche';
+     $DonneesInjectees['TitreDeLaPage'] = 'Recherche';
      $this->load->view('templates/Entete');
-     $this->load->view('Visiteur/ListeArticleRechercher', $DonneesInjectees);
+     $this->load->view('Visiteur/Rechercher', $DonneesInjectees);
      $this->load->view('templates/PiedDePage');
    } // RechercherUnArticle
+
+   public function ResultatRechercher()
+   { 
+    $DonneesInjectees['search'] = $this->ModeleArticle->RechercherUnArticle($pLibelle);
+    $DonneesInjectees['TitreDeLaPage'] = 'Resultats de votre recherche';
+    $this->load->view('templates/Entete');
+    $this->load->view('Visiteur/ResultatRechercher', $DonneesInjectees);
+    $this->load->view('templates/PiedDePage');
+  } // ResultatRechercheUnArticle
 
    public function ajouterUneMarque()
   {
@@ -69,7 +77,7 @@ class Visiteur extends CI_Controller
         'NOMARQUE' => $this->input->post('NoMarque'),
         'NOM' => $this->input->post('NomMarque'),
         ); // NOMARQUE, NOM : champs de la table tabarticle
-        $this->ModeleArticle->insererUneMarque($donneesAInserer); // appel du modèle
+        $this->ModeleArticle->insererUneMarque($DonneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
         $this->load->view('Visiteur/insertionMarqueReussie');
       }
@@ -94,7 +102,7 @@ class Visiteur extends CI_Controller
         'NOCATEGORIE' => $this->input->post('NoCategorie'),
         'LIBELLE' => $this->input->post('NomCategorie'),
         ); // NOCATEGORIE, LIBELLE : champs de la table tabarticle
-        $this->ModeleArticle->insererUneCategorie($donneesAInserer); // appel du modèle
+        $this->ModeleArticle->insererUneCategorie($DonneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
         $this->load->view('Visiteur/insertionCategorieReussie');
       }
