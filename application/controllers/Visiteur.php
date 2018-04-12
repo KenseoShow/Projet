@@ -51,7 +51,7 @@ class Visiteur extends CI_Controller
 
    public function ResultatRechercher()
    { 
-    $DonneesInjectees['search'] = $this->ModeleArticle->RechercherUnArticle($pLibelle);
+    $DonneesInjectees['search'] = $this->ModeleArticle->RechercherUnArticle($libelle);
     $DonneesInjectees['TitreDeLaPage'] = 'Resultats de votre recherche';
     $this->load->view('templates/Entete');
     $this->load->view('Visiteur/ResultatRechercher', $DonneesInjectees);
@@ -77,7 +77,7 @@ class Visiteur extends CI_Controller
         'NOMARQUE' => $this->input->post('NoMarque'),
         'NOM' => $this->input->post('NomMarque'),
         ); // NOMARQUE, NOM : champs de la table tabarticle
-        $this->ModeleArticle->insererUneMarque($DonneesAInserer); // appel du modèle
+        $this->ModeleArticle->insererUneMarque($donneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
         $this->load->view('Visiteur/insertionMarqueReussie');
       }
@@ -102,7 +102,7 @@ class Visiteur extends CI_Controller
         'NOCATEGORIE' => $this->input->post('NoCategorie'),
         'LIBELLE' => $this->input->post('NomCategorie'),
         ); // NOCATEGORIE, LIBELLE : champs de la table tabarticle
-        $this->ModeleArticle->insererUneCategorie($DonneesAInserer); // appel du modèle
+        $this->ModeleArticle->insererUneCategorie($donneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
         $this->load->view('Visiteur/insertionCategorieReussie');
       }
