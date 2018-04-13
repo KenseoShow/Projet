@@ -31,13 +31,8 @@ $this->load->database();
 
      public function RechercherUnArticle($pLibelle)
      {
-        if ($pLibelle === FALSE) // pas de nom d'article en paramètre
-        {  // on retourne tous les articles
-
-             $requete = $this->db->get('produit');
-             return $requete->result_array(); // retour d'un tableau associatif
-        }
-        $requete = $this->db->get_where('produit', array('LIBELLE' => $pLibelle));
+        $this->db->like('LIBELLE', $pLibelle, 'after');
+        $requete = $this->db->get('produit');
         return $requete->row_array(); // retour d'un tableau associatif
      } //RechercherUnProduit
 

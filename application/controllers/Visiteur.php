@@ -4,17 +4,15 @@ class Visiteur extends CI_Controller
    public function __construct()
    {
       parent::__construct();
-      $this->load->helper('url');
       $this->load->helper('assets');
       $this->load->library("pagination");
-      $this->load->model('ModeleArticle');
+      $this->load->view('templates/Entete');
       //$this->load->model('ModeleUtilisateur');
    } // __construct
 
    public function Home() {
     $DonneesInjectees['TitreDeLaPage'] = 'Home';
-    $config["base_url"] = site_url('visiteur/Home');
-    $this->load->view('templates/Entete');
+    $config["base_url"] = site_url('visiteur/Home');  
     $this->load->view("visiteur/Home", $DonneesInjectees);
     $this->load->view('templates/PiedDePage');
    }// Page d'acceuil
@@ -23,7 +21,6 @@ class Visiteur extends CI_Controller
    {
       $DonneesInjectees['lesArticles'] = $this->ModeleArticle->retournerArticles();
       $DonneesInjectees['TitreDeLaPage'] = 'Tous les articles';
-      $this->load->view('templates/Entete');
       $this->load->view('visiteur/listerLesArticles', $DonneesInjectees);
       $this->load->view('templates/PiedDePage');
    } // listerLesArticles
@@ -36,7 +33,6 @@ class Visiteur extends CI_Controller
          show_404();
      }
      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unArticle']['LIBELLE'];
-     $this->load->view('templates/Entete');
      $this->load->view('visiteur/VoirUnArticle', $DonneesInjectees);
      $this->load->view('templates/PiedDePage');
    } // voirUnArticle
@@ -44,16 +40,16 @@ class Visiteur extends CI_Controller
    public function Rechercher()
    { 
      $DonneesInjectees['TitreDeLaPage'] = 'Recherche';
-     $this->load->view('templates/Entete');
      $this->load->view('Visiteur/Rechercher', $DonneesInjectees);
      $this->load->view('templates/PiedDePage');
    } // RechercherUnArticle
 
    public function ResultatRechercher()
    { 
-    $DonneesInjectees['search'] = $this->ModeleArticle->RechercherUnArticle($libelle);
+    $Libelle = $this->input->post('recherche');
+    var_dump($Libelle);
+    $DonneesInjectees['search'] = $this->ModeleArticle->RechercherUnArticle($Libelle);
     $DonneesInjectees['TitreDeLaPage'] = 'Resultats de votre recherche';
-    $this->load->view('templates/Entete');
     $this->load->view('Visiteur/ResultatRechercher', $DonneesInjectees);
     $this->load->view('templates/PiedDePage');
   } // ResultatRechercheUnArticle
@@ -67,7 +63,7 @@ class Visiteur extends CI_Controller
       $this->form_validation->set_rules('NomMarque', 'Marque', 'required');
       if ($this->form_validation->run() === FALSE)
       {   // formulaire non validé, on renvoie le formulaire
-        $this->load->view('templates/Entete');
+
         $this->load->view('Visiteur/ajouterUneMarque', $DonneesInjectees);
         $this->load->view('templates/PiedDePage');
       }
@@ -92,7 +88,7 @@ class Visiteur extends CI_Controller
       $this->form_validation->set_rules('NomCategorie', 'Categorie', 'required');
       if ($this->form_validation->run() === FALSE)
       {   // formulaire non validé, on renvoie le formulaire
-        $this->load->view('templates/Entete');
+
         $this->load->view('Visiteur/ajouterUneCategorie', $DonneesInjectees);
         $this->load->view('templates/PiedDePage');
       }
