@@ -29,7 +29,7 @@ $this->load->database();
          return $this->db->insert('categorie', $pDonneesAInserer);
      } // insererUneCatégorie
 
-     public function RechercherUnArticle($pLibelle)
+     public function RechercherUnArticle($pLibelle = False)
      {
         $this->db->like('LIBELLE', $pLibelle, 'after');
         $requete = $this->db->get('produit');

@@ -48,6 +48,10 @@ class Visiteur extends CI_Controller
    { 
     $Libelle = $this->input->post('recherche');
     var_dump($Libelle);
+    if (empty($Libelle))
+     {   // pas d'article correspondant au n°
+         show_404();
+     }
     $DonneesInjectees['search'] = $this->ModeleArticle->RechercherUnArticle($Libelle);
     $DonneesInjectees['TitreDeLaPage'] = 'Resultats de votre recherche';
     $this->load->view('Visiteur/ResultatRechercher', $DonneesInjectees);
@@ -104,4 +108,28 @@ class Visiteur extends CI_Controller
       }
   } // ajouterUneCatégorie
 
+  public function ajouterUnProduit()
+  {
+      $this->load->helper('form');
+      $this->load->library('form_validation');
+      $DonneesInjectees['TitreDeLaPage'] = 'Ajouter un Produit';
+      $this->form_validation->set_rules('NoCategorie', 'NumeroCategorie', 'required');
+      $this->form_validation->set_rules('NomCategorie', 'Categorie', 'required');
+      if ($this->form_validation->run() === FALSE)
+      {   // formulaire non validé, on renvoie le formulaire
+
+        $this->load->view('Visiteur/ajouterUneCategorie', $DonneesInjectees);
+        $this->load->view('templates/PiedDePage');
+      }
+      else
+      {
+        $donneesAInserer = array(
+        'NOCATEGORIE' => $this->input->post('NoCategorie'),
+        'LIBELLE' => $this->input->post('NomCategorie'),
+        ); // NOCATEGORIE, LIBELLE : champs de la table tabarticle
+        $this->ModeleArticle->insererUneCategorie($donneesAInserer); // appel du modèle
+        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('Visiteur/insertionCategorieReussie');
+      }
+  } // ajouterUneCatégorie
 }  // Visiteur
