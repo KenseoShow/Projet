@@ -29,11 +29,29 @@ $this->load->database();
          return $this->db->insert('categorie', $pDonneesAInserer);
      } // insererUneCatégorie
 
+     public function insererUnProduit($pDonneesAInserer)
+     {
+         return $this->db->insert('produit', $pDonneesAInserer);
+     } // insererUneCatégorie
+
      public function RechercherUnArticle($pLibelle = False)
      {
         $this->db->like('LIBELLE', $pLibelle, 'after');
         $requete = $this->db->get('produit');
         return $requete->row_array(); // retour d'un tableau associatif
      } //RechercherUnProduit
+
+     function TouteslesCatégories()
+    {
+        $this->db->select('LIBELLE');
+        $requete = $this->db->get_where('categorie');
+        return $requete->result_array();
+    }
+    function TouteslesMarques()
+    {
+        $this->db->select('NOM');
+        $requete = $this->db->get_where('Marque', array('NOM'));
+        return $requete->result_array();
+    }
 
 } // Fin Classe

@@ -111,25 +111,34 @@ class Visiteur extends CI_Controller
   public function ajouterUnProduit()
   {
       $this->load->helper('form');
-      $this->load->library('form_validation');
       $DonneesInjectees['TitreDeLaPage'] = 'Ajouter un Produit';
-      $this->form_validation->set_rules('NoCategorie', 'NumeroCategorie', 'required');
-      $this->form_validation->set_rules('NomCategorie', 'Categorie', 'required');
-      if ($this->form_validation->run() === FALSE)
-      {   // formulaire non validé, on renvoie le formulaire
-
-        $this->load->view('Visiteur/ajouterUneCategorie', $DonneesInjectees);
-        $this->load->view('templates/PiedDePage');
+      $DonneesInjectees['lesCategories'] = $this->ModeleArticle->TouteslesCatégories();
+      $DonneesInjectees['lesMarques'] = $this->ModeleArticle->TouteslesMarques();
+      var_dump($DonneesInjectees);
+      If ($this->input->post('boutonAjouter'))
+      {
+        $donneesAInserer = array(
+          'NOPRODUIT' => $this->input->post('NoProduit'),
+          'NOCATEGORIE' => $this->input->post('NoCategorie'),
+          'NOMARQUE' => $this->input->post('NoMarque'),
+          'LIBELLE' => $this->input->post('LibelleProduit'),
+          'DETAIL' => $this->input->post('DetailProduit'),
+          'PRIXHT' => $this->input->post('PrixHTProduit'),
+          'TAUXTVA' => $this->input->post('TauxTVAProduit'),
+          'NOMIMAGE' => $this->input->post('NominageProduit'),
+          'QUANTITEENSTOCK' => $this->input->post('QuantiteStockProduit'),
+          'DATEAJOUT' => $this->input->post('DateAjout'),
+          'DISPONIBLE' => $this->input->post('DisponibleProduit')
+        );
+        $this->ModeleArticle->insererUnProduit($donneesAInserer); // appel du modèle
+        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('Visiteur/ajouterUnProduitReussie');
       }
       else
       {
-        $donneesAInserer = array(
-        'NOCATEGORIE' => $this->input->post('NoCategorie'),
-        'LIBELLE' => $this->input->post('NomCategorie'),
-        ); // NOCATEGORIE, LIBELLE : champs de la table tabarticle
-        $this->ModeleArticle->insererUneCategorie($donneesAInserer); // appel du modèle
-        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
-        $this->load->view('Visiteur/insertionCategorieReussie');
+        $this->load->view('visiteur/ajouterUnProduit', $DonneesInjectees);
+        $this->load->view('templates/PiedDePage');
       }
-  } // ajouterUneCatégorie
+  } // ajouterUnProduit
+
 }  // Visiteur
