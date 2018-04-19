@@ -9,3 +9,4 @@
       <input type="text" placeholder="Recherche.." name="recherche">
       <button type="submit">Submit</button>
     </form>
+<a href="<?php echo site_url('visiteur/Inscription') ?>">Inscription</a>&nbsp;&nbsp;

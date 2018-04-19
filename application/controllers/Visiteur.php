@@ -52,7 +52,7 @@ class Visiteur extends CI_Controller
      {   // pas d'article correspondant au n°
          show_404();
      }
-    $DonneesInjectees['search'] = $this->ModeleArticle->RechercherUnArticle($Libelle);
+    $DonneesInjectees['Search'] = $this->ModeleArticle->RechercherUnArticle($Libelle);
     $DonneesInjectees['TitreDeLaPage'] = 'Resultats de votre recherche';
     $this->load->view('Visiteur/ResultatRechercher', $DonneesInjectees);
     $this->load->view('templates/PiedDePage');
@@ -63,7 +63,6 @@ class Visiteur extends CI_Controller
       $this->load->helper('form');
       $this->load->library('form_validation');
       $DonneesInjectees['TitreDeLaPage'] = 'Ajouter une marque';
-      $this->form_validation->set_rules('NoMarque', 'NumeroMarque', 'required');
       $this->form_validation->set_rules('NomMarque', 'Marque', 'required');
       if ($this->form_validation->run() === FALSE)
       {   // formulaire non validé, on renvoie le formulaire
@@ -74,7 +73,6 @@ class Visiteur extends CI_Controller
       else
       {
         $donneesAInserer = array(
-        'NOMARQUE' => $this->input->post('NoMarque'),
         'NOM' => $this->input->post('NomMarque'),
         ); // NOMARQUE, NOM : champs de la table tabarticle
         $this->ModeleArticle->insererUneMarque($donneesAInserer); // appel du modèle
@@ -88,7 +86,6 @@ class Visiteur extends CI_Controller
       $this->load->helper('form');
       $this->load->library('form_validation');
       $DonneesInjectees['TitreDeLaPage'] = 'Ajouter une catégorie';
-      $this->form_validation->set_rules('NoCategorie', 'NumeroCategorie', 'required');
       $this->form_validation->set_rules('NomCategorie', 'Categorie', 'required');
       if ($this->form_validation->run() === FALSE)
       {   // formulaire non validé, on renvoie le formulaire
@@ -99,7 +96,6 @@ class Visiteur extends CI_Controller
       else
       {
         $donneesAInserer = array(
-        'NOCATEGORIE' => $this->input->post('NoCategorie'),
         'LIBELLE' => $this->input->post('NomCategorie'),
         ); // NOCATEGORIE, LIBELLE : champs de la table tabarticle
         $this->ModeleArticle->insererUneCategorie($donneesAInserer); // appel du modèle
@@ -114,11 +110,9 @@ class Visiteur extends CI_Controller
       $DonneesInjectees['TitreDeLaPage'] = 'Ajouter un Produit';
       $DonneesInjectees['lesCategories'] = $this->ModeleArticle->TouteslesCatégories();
       $DonneesInjectees['lesMarques'] = $this->ModeleArticle->TouteslesMarques();
-      var_dump($DonneesInjectees);
       If ($this->input->post('boutonAjouter'))
       {
         $donneesAInserer = array(
-          'NOPRODUIT' => $this->input->post('NoProduit'),
           'NOCATEGORIE' => $this->input->post('NoCategorie'),
           'NOMARQUE' => $this->input->post('NoMarque'),
           'LIBELLE' => $this->input->post('LibelleProduit'),
@@ -140,5 +134,32 @@ class Visiteur extends CI_Controller
         $this->load->view('templates/PiedDePage');
       }
   } // ajouterUnProduit
+
+  public function Inscription()
+  {
+      $this->load->helper('form');
+      $DonneesInjectees['TitreDeLaPage'] = 'Inscription';
+      If ($this->input->post('boutonInscription'))
+      {
+        $donneesAInserer = array(
+          'NOM' => $this->input->post('Nom'),
+          'PRENOM' => $this->input->post('Prenom'),
+          'ADRESSE' => $this->input->post('Adresse'),
+          'VILLE' => $this->input->post('Ville'),
+          'CODEPOSTAL' => $this->input->post('CodePostal'),
+          'EMAIL' => $this->input->post('Email'),
+          'MOTDEPASSE' => $this->input->post('MotDePasse'),
+          'PROFIL' => $this->input->post('Profil'),
+        );
+        $this->ModeleArticle->insererUnProduit($donneesAInserer); // appel du modèle
+        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('Visiteur/InscriptionReussie');
+      }
+      else
+      {
+        $this->load->view('visiteur/Inscription', $DonneesInjectees);
+        $this->load->view('templates/PiedDePage');
+      }
+  } // Inscription
 
 }  // Visiteur

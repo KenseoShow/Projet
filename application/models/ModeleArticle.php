@@ -34,23 +34,27 @@ $this->load->database();
          return $this->db->insert('produit', $pDonneesAInserer);
      } // insererUneCatégorie
 
+     public function insererInscription($pDonneesAInserer)
+     {
+         return $this->db->insert('client', $pDonneesAInserer);
+     } // insererUneCatégorie
+
+
      public function RechercherUnArticle($pLibelle = False)
      {
         $this->db->like('LIBELLE', $pLibelle, 'after');
         $requete = $this->db->get('produit');
-        return $requete->row_array(); // retour d'un tableau associatif
+        return $requete->result_array(); // retour d'un tableau associatif
      } //RechercherUnProduit
 
      function TouteslesCatégories()
     {
-        $this->db->select('LIBELLE');
-        $requete = $this->db->get_where('categorie');
+        $requete = $this->db->get('categorie');
         return $requete->result_array();
     }
     function TouteslesMarques()
     {
-        $this->db->select('NOM');
-        $requete = $this->db->get_where('Marque', array('NOM'));
+        $requete = $this->db->get('Marque');
         return $requete->result_array();
     }
 
