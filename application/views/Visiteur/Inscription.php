@@ -16,16 +16,13 @@ echo form_label("Ville : ", 'lbltVille');
 echo form_input('Ville','',array('pattern' =>'^[a-zA-Z][a-zA-Z0-9]*','required'=>'required')).'<BR>';
 
 echo form_label("Code Postal : ", 'lbltCP');
-echo form_input('Ville','',array('pattern' =>'^[a-zA-Z][a-zA-Z0-9]*','required'=>'required')).'<BR>';
+echo form_input('CodePostal','',array('pattern' =>'^[Z0-9]*','required'=>'required')).'<BR>';
 
 echo form_label("Email : ", 'lbltEmail');
 echo form_input('Email','',array('pattern' =>'^[a-zA-Z][a-zA-Z0-9]*','required'=>'required')).'<BR>';
   
 echo form_label("Mot de passe : ", 'lbltMDP');
-echo form_input('MotDePasse','',array('pattern' =>'^[a-zA-Z][a-zA-Z0-9]*','required'=>'required')).'<BR>';
-
-echo form_label("Profil : ", 'lbltProfil');
-echo form_input('Profil','',array('pattern' =>'^[a-zA-Z][a-zA-Z0-9]*','required'=>'required')).'<BR>';
+echo form_password('MotDePasse','',array('pattern' =>'^[a-zA-Z][a-zA-Z0-9]*','required'=>'required')).'<BR>';
 
 echo form_submit('boutonInscription', 'Inscription').'<BR>';
 echo form_close();

@@ -7,7 +7,7 @@ class Visiteur extends CI_Controller
       $this->load->helper('assets');
       $this->load->library("pagination");
       $this->load->view('templates/Entete');
-      //$this->load->model('ModeleUtilisateur');
+      $this->load->model('ModeleUtilisateur');
    } // __construct
 
    public function Home() {
@@ -58,83 +58,7 @@ class Visiteur extends CI_Controller
     $this->load->view('templates/PiedDePage');
   } // ResultatRechercheUnArticle
 
-   public function ajouterUneMarque()
-  {
-      $this->load->helper('form');
-      $this->load->library('form_validation');
-      $DonneesInjectees['TitreDeLaPage'] = 'Ajouter une marque';
-      $this->form_validation->set_rules('NomMarque', 'Marque', 'required');
-      if ($this->form_validation->run() === FALSE)
-      {   // formulaire non validé, on renvoie le formulaire
-
-        $this->load->view('Visiteur/ajouterUneMarque', $DonneesInjectees);
-        $this->load->view('templates/PiedDePage');
-      }
-      else
-      {
-        $donneesAInserer = array(
-        'NOM' => $this->input->post('NomMarque'),
-        ); // NOMARQUE, NOM : champs de la table tabarticle
-        $this->ModeleArticle->insererUneMarque($donneesAInserer); // appel du modèle
-        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
-        $this->load->view('Visiteur/insertionMarqueReussie');
-      }
-  } // ajouterUneMarque
-
-  public function ajouterUneCategorie()
-  {
-      $this->load->helper('form');
-      $this->load->library('form_validation');
-      $DonneesInjectees['TitreDeLaPage'] = 'Ajouter une catégorie';
-      $this->form_validation->set_rules('NomCategorie', 'Categorie', 'required');
-      if ($this->form_validation->run() === FALSE)
-      {   // formulaire non validé, on renvoie le formulaire
-
-        $this->load->view('Visiteur/ajouterUneCategorie', $DonneesInjectees);
-        $this->load->view('templates/PiedDePage');
-      }
-      else
-      {
-        $donneesAInserer = array(
-        'LIBELLE' => $this->input->post('NomCategorie'),
-        ); // NOCATEGORIE, LIBELLE : champs de la table tabarticle
-        $this->ModeleArticle->insererUneCategorie($donneesAInserer); // appel du modèle
-        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
-        $this->load->view('Visiteur/insertionCategorieReussie');
-      }
-  } // ajouterUneCatégorie
-
-  public function ajouterUnProduit()
-  {
-      $this->load->helper('form');
-      $DonneesInjectees['TitreDeLaPage'] = 'Ajouter un Produit';
-      $DonneesInjectees['lesCategories'] = $this->ModeleArticle->TouteslesCatégories();
-      $DonneesInjectees['lesMarques'] = $this->ModeleArticle->TouteslesMarques();
-      If ($this->input->post('boutonAjouter'))
-      {
-        $donneesAInserer = array(
-          'NOCATEGORIE' => $this->input->post('NoCategorie'),
-          'NOMARQUE' => $this->input->post('NoMarque'),
-          'LIBELLE' => $this->input->post('LibelleProduit'),
-          'DETAIL' => $this->input->post('DetailProduit'),
-          'PRIXHT' => $this->input->post('PrixHTProduit'),
-          'TAUXTVA' => $this->input->post('TauxTVAProduit'),
-          'NOMIMAGE' => $this->input->post('NominageProduit'),
-          'QUANTITEENSTOCK' => $this->input->post('QuantiteStockProduit'),
-          'DATEAJOUT' => $this->input->post('DateAjout'),
-          'DISPONIBLE' => $this->input->post('DisponibleProduit')
-        );
-        $this->ModeleArticle->insererUnProduit($donneesAInserer); // appel du modèle
-        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
-        $this->load->view('Visiteur/ajouterUnProduitReussie');
-      }
-      else
-      {
-        $this->load->view('visiteur/ajouterUnProduit', $DonneesInjectees);
-        $this->load->view('templates/PiedDePage');
-      }
-  } // ajouterUnProduit
-
+   
   public function Inscription()
   {
       $this->load->helper('form');
@@ -149,9 +73,9 @@ class Visiteur extends CI_Controller
           'CODEPOSTAL' => $this->input->post('CodePostal'),
           'EMAIL' => $this->input->post('Email'),
           'MOTDEPASSE' => $this->input->post('MotDePasse'),
-          'PROFIL' => $this->input->post('Profil'),
+          'PROFIL' => 'client',
         );
-        $this->ModeleArticle->insererUnProduit($donneesAInserer); // appel du modèle
+        $this->ModeleArticle->insererInscription($donneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
         $this->load->view('Visiteur/InscriptionReussie');
       }
@@ -161,5 +85,49 @@ class Visiteur extends CI_Controller
         $this->load->view('templates/PiedDePage');
       }
   } // Inscription
+
+  public function seConnecter()
+  {
+    $this->load->helper('form');
+    $this->load->library('form_validation');
+    $DonneesInjectees['TitreDeLaPage'] = 'Se connecter';
+    $this->form_validation->set_rules('txtEmail', 'Identifiant', 'required');
+    $this->form_validation->set_rules('txtMotDePasse', 'Mot de passe', 'required');
+    if ($this->form_validation->run() === FALSE)
+      { 
+        $this->load->view('visiteur/seConnecter', $DonneesInjectees);
+        $this->load->view('templates/PiedDePage');
+      }
+        else
+          { 
+            $Utilisateur = array( // EMAIL, MOTDEPASSE : champs de la table client
+            'EMAIL' => $this->input->post('txtEmail'),
+            'MOTDEPASSE' => $this->input->post('txtMotDePasse'),
+                                );
+            $UtilisateurRetourne = $this->ModeleUtilisateur->retournerUtilisateur($Utilisateur);
+            var_dump($Utilisateur);
+                if (!($UtilisateurRetourne == null))
+                  {    // on a trouvé, identifiant et statut (droit) sont stockés en session
+                      $this->load->library('session');
+                      $this->session->identifiant = $UtilisateurRetourne->EMAIL;
+                      $this->session->statut = $UtilisateurRetourne->PROFIL;
+                      $DonneesInjectees['Identifiant'] = $Utilisateur['EMAIL'];
+                      
+                      $this->load->view('visiteur/connexionReussie', $DonneesInjectees);
+                      $this->load->view('templates/PiedDePage');
+                  }
+                    else
+                        {    // utilisateur non trouvé on renvoie le formulaire de connexion
+     
+                        $this->load->view('visiteur/seConnecter', $DonneesInjectees);
+                        $this->load->view('templates/PiedDePage');
+                        }  
+          }
+  } // fin seConnecter
+
+  public function seDeConnecter() 
+  { // destruction de la session = déconnexion
+    $this->session->sess_destroy();
+  } // fin seDeConnecter
 
 }  // Visiteur

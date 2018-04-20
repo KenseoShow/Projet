@@ -1,7 +1,7 @@
 <h2><?php echo $TitreDeLaPage ?></h2>
 
 <?php
-echo form_open('Visiteur/ajouterUnProduit');
+echo form_open('Administrateur/ajouterUnProduit');
 
 echo form_label("Numero de categorie : ", 'lbltNoCategorie');
 ?>
@@ -32,8 +32,8 @@ foreach($lesMarques as $uneMarque)
 echo form_label("Le libelle du produit : ", 'lbltLibelleProduit');
 echo form_input('LibelleProduit','',array('pattern' =>'^[a-zA-Z][a-zA-Z0-9]*','required'=>'required')).'<BR>';
 
-echo form_label("Le detail du produit : ", 'lbltDetailProduit');
-echo form_input('DetailProduit','',array('pattern' =>'^[a-zA-Z][a-zA-Z0-9]*','required'=>'required')).'<BR>';
+echo form_label("Le detail du produit : ", 'lbltDetailProduit').'<BR>';
+echo form_textarea('DetailProduit','',array('pattern' =>'^[a-zA-Z][a-zA-Z0-9]*','required'=>'required')).'<BR>';
 
 echo form_label("Le prix HT du produit : ", 'lbltPrixHTProduit');
 echo form_input('PrixHTProduit','',array('pattern' =>'[0-9]*','required'=>'required', 'title'=>'Saisir des nombres uniquement')).'<BR>';

@@ -39,7 +39,6 @@ $this->load->database();
          return $this->db->insert('client', $pDonneesAInserer);
      } // insererUneCatégorie
 
-
      public function RechercherUnArticle($pLibelle = False)
      {
         $this->db->like('LIBELLE', $pLibelle, 'after');
@@ -52,9 +51,10 @@ $this->load->database();
         $requete = $this->db->get('categorie');
         return $requete->result_array();
     }
+
     function TouteslesMarques()
     {
-        $requete = $this->db->get('Marque');
+        $requete = $this->db->get('marque');
         return $requete->result_array();
     }
 
