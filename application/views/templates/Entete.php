@@ -7,7 +7,7 @@
 <?php echo 'Utilisateur connecté : <B>'.$this->session->Identifiant.'</B>&nbsp;&nbsp;';?>
 <a href="<?php echo site_url('visiteur/seDeconnecter') ?>">Se déconnecter</a>&nbsp;&nbsp;
 
-<?php if ($Profil=="admin") : ?>
+<?php if ($this->session->statut=="admin") : ?>
    <a href="<?php echo site_url('administrateur/ajouterUnProduit') ?>">Ajouter un article</a>&nbsp;&nbsp;
 <?php endif; ?>
 <?php else : ?>
@@ -23,4 +23,3 @@
       <button type="submit">Submit</button>
     </form>
 <?php echo form_close();?>
-

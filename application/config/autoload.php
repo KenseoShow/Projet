@@ -72,6 +72,12 @@ $autoload['libraries'] = array('session');
 | Prototype:
 |
 |	$autoload['drivers'] = array('cache');
+|
+| You can also supply an alternative property name to be assigned in
+| the controller:
+|
+|	$autoload['drivers'] = array('cache' => 'cch');
+|
 */
 $autoload['drivers'] = array();
 
@@ -127,4 +133,3 @@ $autoload['language'] = array();
 |	$autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = array('ModeleArticle');
-
