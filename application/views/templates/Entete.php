@@ -7,7 +7,7 @@
 <?php echo 'Utilisateur connecté : <B>'.$this->session->Identifiant.'</B>&nbsp;&nbsp;';?>
 <a href="<?php echo site_url('visiteur/seDeconnecter') ?>">Se déconnecter</a>&nbsp;&nbsp;
 
-<?php if ($this->session->statut=="admin") : ?>
+<?php if ($Profil=="admin") : ?>
    <a href="<?php echo site_url('administrateur/ajouterUnProduit') ?>">Ajouter un article</a>&nbsp;&nbsp;
 <?php endif; ?>
 <?php else : ?>

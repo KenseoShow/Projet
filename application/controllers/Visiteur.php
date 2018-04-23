@@ -4,9 +4,11 @@ class Visiteur extends CI_Controller
    public function __construct()
    {
       parent::__construct();
+      $this->load->helper('url');
       $this->load->helper('assets');
       $this->load->library("pagination");
       $this->load->view('templates/Entete');
+      $this->load->model('ModeleArticle');
       $this->load->model('ModeleUtilisateur');
    } // __construct
 
@@ -105,14 +107,13 @@ class Visiteur extends CI_Controller
             'MOTDEPASSE' => $this->input->post('txtMotDePasse'),
                                 );
             $UtilisateurRetourne = $this->ModeleUtilisateur->retournerUtilisateur($Utilisateur);
-            var_dump($Utilisateur);
                 if (!($UtilisateurRetourne == null))
                   {    // on a trouvé, identifiant et statut (droit) sont stockés en session
                       $this->load->library('session');
                       $this->session->identifiant = $UtilisateurRetourne->EMAIL;
                       $this->session->statut = $UtilisateurRetourne->PROFIL;
                       $DonneesInjectees['Identifiant'] = $Utilisateur['EMAIL'];
-                      
+                      var_dump($this->session->statut);
                       $this->load->view('visiteur/connexionReussie', $DonneesInjectees);
                       $this->load->view('templates/PiedDePage');
                   }
