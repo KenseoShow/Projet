@@ -4,9 +4,13 @@ class Administrateur extends CI_Controller
     public function __construct()
     {
        parent::__construct();
+       $this->load->helper('url');
+      $this->load->helper('assets');
+      $this->load->library("pagination");
+      $this->load->model('ModeleUtilisateur');
        $this->load->model('ModeleArticle');
        $this->load->library('session');
-       if ($this->session->statut==0) // 0 : statut visiteur
+       if ($this->session->statut != "admin") // 0 : statut visiteur
        {
             $this->load->helper('url'); // pour utiliser redirect
             redirect('/visiteur/seConnecter'); // pas les droits : redirection vers connexion
@@ -21,7 +25,7 @@ class Administrateur extends CI_Controller
       $this->form_validation->set_rules('NomMarque', 'Marque', 'required');
       if ($this->form_validation->run() === FALSE)
       {   // formulaire non validé, on renvoie le formulaire
-
+        $this->load->view('templates/Entete');
         $this->load->view('Administrateur/ajouterUneMarque', $DonneesInjectees);
         $this->load->view('templates/PiedDePage');
       }
@@ -32,6 +36,7 @@ class Administrateur extends CI_Controller
         ); // NOMARQUE, NOM : champs de la table tabarticle
         $this->ModeleArticle->insererUneMarque($donneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('templates/Entete');
         $this->load->view('Administrateur/insertionMarqueReussie');
       }
     } // ajouterUneMarque
@@ -44,7 +49,7 @@ class Administrateur extends CI_Controller
       $this->form_validation->set_rules('NomCategorie', 'Categorie', 'required');
       if ($this->form_validation->run() === FALSE)
       {   // formulaire non validé, on renvoie le formulaire
-
+        $this->load->view('templates/Entete');
         $this->load->view('Administrateur/ajouterUneCategorie', $DonneesInjectees);
         $this->load->view('templates/PiedDePage');
       }
@@ -55,6 +60,7 @@ class Administrateur extends CI_Controller
         ); // NOCATEGORIE, LIBELLE : champs de la table tabarticle
         $this->ModeleArticle->insererUneCategorie($donneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('templates/Entete');
         $this->load->view('Administrateur/insertionCategorieReussie');
       }
     } // ajouterUneCatégorie
@@ -81,10 +87,12 @@ class Administrateur extends CI_Controller
         );
         $this->ModeleArticle->insererUnProduit($donneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('templates/Entete');
         $this->load->view('Administrateur/ajouterUnProduitReussie');
       }
       else
       {
+        $this->load->view('templates/Entete');
         $this->load->view('Administrateur/ajouterUnProduit', $DonneesInjectees);
         $this->load->view('templates/PiedDePage');
       }

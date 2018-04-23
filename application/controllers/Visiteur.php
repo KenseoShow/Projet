@@ -7,7 +7,6 @@ class Visiteur extends CI_Controller
       $this->load->helper('url');
       $this->load->helper('assets');
       $this->load->library("pagination");
-      $this->load->view('templates/Entete');
       $this->load->model('ModeleArticle');
       $this->load->model('ModeleUtilisateur');
    } // __construct
@@ -15,6 +14,7 @@ class Visiteur extends CI_Controller
    public function Home() {
     $DonneesInjectees['TitreDeLaPage'] = 'Home';
     $config["base_url"] = site_url('visiteur/Home');  
+    $this->load->view('templates/Entete');
     $this->load->view("visiteur/Home", $DonneesInjectees);
     $this->load->view('templates/PiedDePage');
    }// Page d'acceuil
@@ -23,6 +23,7 @@ class Visiteur extends CI_Controller
    {
       $DonneesInjectees['lesArticles'] = $this->ModeleArticle->retournerArticles();
       $DonneesInjectees['TitreDeLaPage'] = 'Tous les articles';
+      $this->load->view('templates/Entete');
       $this->load->view('visiteur/listerLesArticles', $DonneesInjectees);
       $this->load->view('templates/PiedDePage');
    } // listerLesArticles
@@ -35,6 +36,7 @@ class Visiteur extends CI_Controller
          show_404();
      }
      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unArticle']['LIBELLE'];
+     $this->load->view('templates/Entete');
      $this->load->view('visiteur/VoirUnArticle', $DonneesInjectees);
      $this->load->view('templates/PiedDePage');
    } // voirUnArticle
@@ -42,6 +44,7 @@ class Visiteur extends CI_Controller
    public function Rechercher()
    { 
      $DonneesInjectees['TitreDeLaPage'] = 'Recherche';
+     $this->load->view('templates/Entete');
      $this->load->view('Visiteur/Rechercher', $DonneesInjectees);
      $this->load->view('templates/PiedDePage');
    } // RechercherUnArticle
@@ -56,6 +59,7 @@ class Visiteur extends CI_Controller
      }
     $DonneesInjectees['Search'] = $this->ModeleArticle->RechercherUnArticle($Libelle);
     $DonneesInjectees['TitreDeLaPage'] = 'Resultats de votre recherche';
+    $this->load->view('templates/Entete');
     $this->load->view('Visiteur/ResultatRechercher', $DonneesInjectees);
     $this->load->view('templates/PiedDePage');
   } // ResultatRechercheUnArticle
@@ -79,10 +83,12 @@ class Visiteur extends CI_Controller
         );
         $this->ModeleArticle->insererInscription($donneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('templates/Entete');
         $this->load->view('Visiteur/InscriptionReussie');
       }
       else
       {
+        $this->load->view('templates/Entete');
         $this->load->view('visiteur/Inscription', $DonneesInjectees);
         $this->load->view('templates/PiedDePage');
       }
@@ -97,6 +103,7 @@ class Visiteur extends CI_Controller
     $this->form_validation->set_rules('txtMotDePasse', 'Mot de passe', 'required');
     if ($this->form_validation->run() === FALSE)
       { 
+        $this->load->view('templates/Entete');
         $this->load->view('visiteur/seConnecter', $DonneesInjectees);
         $this->load->view('templates/PiedDePage');
       }
@@ -109,11 +116,11 @@ class Visiteur extends CI_Controller
             $UtilisateurRetourne = $this->ModeleUtilisateur->retournerUtilisateur($Utilisateur);
                 if (!($UtilisateurRetourne == null))
                   {    // on a trouvé, identifiant et statut (droit) sont stockés en session
-                      $this->load->library('session');
+                      
                       $this->session->identifiant = $UtilisateurRetourne->EMAIL;
                       $this->session->statut = $UtilisateurRetourne->PROFIL;
                       $DonneesInjectees['Identifiant'] = $Utilisateur['EMAIL'];
-                      var_dump($this->session->statut);
+                      $this->load->view('templates/Entete');
                       $this->load->view('visiteur/connexionReussie', $DonneesInjectees);
                       $this->load->view('templates/PiedDePage');
                   }
