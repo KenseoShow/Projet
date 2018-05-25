@@ -32,7 +32,19 @@ $this->load->database();
      public function insererUnProduit($pDonneesAInserer)
      {
          return $this->db->insert('produit', $pDonneesAInserer);
-     } // insererUneCatégorie
+     } // insererUnProduit
+
+     public function SupprimerUnProduit($pDonneesAInserer, $id)
+     {
+        $this->db->where('NOPRODUIT', $id);
+        return $this->db->update('produit', $pDonneesAInserer);
+     } // SupprimerUnProduit
+
+     public function ModificationUnProduit($pDonneesAInserer, $id)
+     {
+        $this->db->where('NOPRODUIT', $id);
+        return $this->db->update('produit', $pDonneesAInserer);
+     } // SupprimerUnProduit
 
      public function insererInscription($pDonneesAInserer)
      {
@@ -55,6 +67,12 @@ $this->load->database();
     function TouteslesMarques()
     {
         $requete = $this->db->get('marque');
+        return $requete->result_array();
+    }
+
+    function TouteslesProduits()
+    {
+        $requete = $this->db->get('produit');
         return $requete->result_array();
     }
 

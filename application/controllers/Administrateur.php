@@ -83,7 +83,7 @@ class Administrateur extends CI_Controller
           'NOMIMAGE' => $this->input->post('NominageProduit'),
           'QUANTITEENSTOCK' => $this->input->post('QuantiteStockProduit'),
           'DATEAJOUT' => $this->input->post('DateAjout'),
-          'DISPONIBLE' => $this->input->post('DisponibleProduit')
+          'DISPONIBLE' => '1',
         );
         $this->ModeleArticle->insererUnProduit($donneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
@@ -97,4 +97,66 @@ class Administrateur extends CI_Controller
         $this->load->view('templates/PiedDePage');
       }
     } // ajouterUnProduit
+
+    public function SupprimerUnProduit()
+    {
+      $this->load->helper('form');
+      $DonneesInjectees['TitreDeLaPage'] = 'Supprimer un produit';
+      $DonneesInjectees['lesProduits'] = $this->ModeleArticle->TouteslesProduits();
+      If ($this->input->post('boutonSupprimer'))
+      {
+        $donneesAInserer = array(
+          'NOPRODUIT' => $this->input->post('NoProduit'),
+          'DISPONIBLE' => '0',
+        );
+        $id = $this->input->post('NoProduit');
+        $this->ModeleArticle->SupprimerUnProduit($donneesAInserer, $id);// appel du modèle
+        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('templates/Entete');
+        $this->load->view('Administrateur/SuppressionUnProduitReussie');
+      }
+      else
+      {
+        $this->load->view('templates/Entete');
+        $this->load->view('Administrateur/SupprimerUnProduit', $DonneesInjectees);
+        $this->load->view('templates/PiedDePage');
+      }
+    } // SupprimerUnProduit
+
+    public function ModificationUnProduit()
+    {
+      $this->load->helper('form');
+      $DonneesInjectees['TitreDeLaPage'] = 'Modification un produit';
+      $DonneesInjectees['lesProduits'] = $this->ModeleArticle->TouteslesProduits();
+      $DonneesInjectees['lesCategories'] = $this->ModeleArticle->TouteslesCatégories();
+      $DonneesInjectees['lesMarques'] = $this->ModeleArticle->TouteslesMarques();
+      If ($this->input->post('boutonModification'))
+      {
+        $donneesAInserer = array(
+          'NOPRODUIT' => $this->input->post('NoProduit'),
+          'NOCATEGORIE' => $this->input->post('NoCategorie'),
+          'NOMARQUE' => $this->input->post('NoMarque'),
+          'LIBELLE' => $this->input->post('LibelleProduit'),
+          'DETAIL' => $this->input->post('DetailProduit'),
+          'PRIXHT' => $this->input->post('PrixHTProduit'),
+          'TAUXTVA' => $this->input->post('TauxTVAProduit'),
+          'NOMIMAGE' => $this->input->post('NominageProduit'),
+          'QUANTITEENSTOCK' => $this->input->post('QuantiteStockProduit'),
+          'DATEAJOUT' => $this->input->post('DateAjout'),
+          'DISPONIBLE' => $this->input->post('DisponibleProduit')
+          
+        );
+        $id = $this->input->post('NoProduit');
+        $this->ModeleArticle->ModificationUnProduit($donneesAInserer, $id);// appel du modèle
+        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('templates/Entete');
+        $this->load->view('Administrateur/ModificationUnProduitReussie');
+      }
+      else
+      {
+        $this->load->view('templates/Entete');
+        $this->load->view('Administrateur/ModificationUnProduit', $DonneesInjectees);
+        $this->load->view('templates/PiedDePage');
+      }
+    } // ModificationUnProduit
 }

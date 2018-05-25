@@ -20,4 +20,10 @@ class ModeleUtilisateur extends CI_Model
         // retour sous forme d'objets
         
     } // retournerUtilisateur
+
+    public function ModificationUnCompte($pDonneesAInserer, $id)
+     {
+        $this->db->where('EMAIL', $id);
+        return $this->db->update('client', $pDonneesAInserer);
+     } // ModifierUnCompte
 } // Fin Classe

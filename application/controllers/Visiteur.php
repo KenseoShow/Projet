@@ -52,7 +52,6 @@ class Visiteur extends CI_Controller
    public function ResultatRechercher()
    { 
     $Libelle = $this->input->post('recherche');
-    var_dump($Libelle);
     if (empty($Libelle))
      {   // pas d'article correspondant au n°
          show_404();
@@ -136,6 +135,39 @@ class Visiteur extends CI_Controller
   public function seDeConnecter() 
   { // destruction de la session = déconnexion
     $this->session->sess_destroy();
+    $DonneesInjectees['TitreDeLaPage'] = 'Deconnection';
+    $this->load->view('templates/Entete');
+    $this->load->view('Visiteur/seDeconnecter', $DonneesInjectees);
+    $this->load->view('templates/PiedDePage');
   } // fin seDeConnecter
 
+  public function ModificationUnCompte()
+  {
+    $this->load->helper('form');
+    $DonneesInjectees['TitreDeLaPage'] = 'Modifier son Compte';
+    If ($this->input->post('boutonModification'))
+    {
+      $donneesAInserer = array(
+          'NOM' => $this->input->post('Nom'),
+          'PRENOM' => $this->input->post('Prenom'),
+          'ADRESSE' => $this->input->post('Adresse'),
+          'VILLE' => $this->input->post('Ville'),
+          'CODEPOSTAL' => $this->input->post('CodePostal'),
+          'EMAIL' => $this->input->post('Email'),
+          'MOTDEPASSE' => $this->input->post('MotDePasse'),
+      );
+      $id = $this->session->identifiant;
+      $this->ModeleUtilisateur->ModificationUnCompte($donneesAInserer, $id);// appel du modèle
+      $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+      $this->load->view('templates/Entete');
+      $this->load->view('Visiteur/ModificationUnCompteReussie');
+    }
+    else
+    {
+      $this->load->view('templates/Entete');
+      $this->load->view('Visiteur/ModificationUncompte', $DonneesInjectees);
+      $this->load->view('templates/PiedDePage');
+    }
+
+  } // ModificationCompte
 }  // Visiteur
