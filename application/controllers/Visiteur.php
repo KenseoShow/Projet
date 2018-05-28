@@ -9,6 +9,7 @@ class Visiteur extends CI_Controller
       $this->load->library("pagination");
       $this->load->model('ModeleArticle');
       $this->load->model('ModeleUtilisateur');
+      $this->load->library('cart');
    } // __construct
 
    public function Home() {
@@ -30,16 +31,61 @@ class Visiteur extends CI_Controller
 
    public function voirUnArticle($noArticle = NULL)
    {
-     $DonneesInjectees['unArticle'] = $this->ModeleArticle->retournerArticles($noArticle);
-     if (empty($DonneesInjectees['unArticle']))
-     {   // pas d'article correspondant au n°
-         show_404();
+    
+    $DonneesInjectees['unArticle'] = $this->ModeleArticle->retournerArticles($noArticle);
+    if (empty($DonneesInjectees['unArticle']))
+    {   // pas d'article correspondant au n°
+        show_404();
+    }
+     else
+     {
+      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unArticle']['LIBELLE'];
+      $this->load->view('templates/Entete');
+      $this->load->view('visiteur/VoirUnArticle', $DonneesInjectees);
+      $this->load->view('templates/PiedDePage');
      }
-     $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unArticle']['LIBELLE'];
-     $this->load->view('templates/Entete');
-     $this->load->view('visiteur/VoirUnArticle', $DonneesInjectees);
-     $this->load->view('templates/PiedDePage');
    } // voirUnArticle
+
+   public function AjouterPanier($noArticle = null)
+   {
+    $Produitretourne=$this->ModeleArticle->retournerarticle($noArticle);
+    $Libelle=$Produitretourne['LIBELLE'];
+    $PrixProduit=$Produitretourne['PRIXHT']*(($Produitretourne['TAUXTVA']/100)+1);
+    if($this->input->post('btnajouter'))
+    {
+      $insertion=array(
+        'id'=> $noArticle,
+        'qty' => 1,
+        'price' => $PrixProduit,
+        'name' => $Libelle
+      );
+      $this->cart->insert($insertion);
+      $this->load->view('templates/Entete');
+     $this->load->view('visiteur/insertionMarqueReussie');
+     $this->load->view('templates/PiedDePage');
+    }
+    else
+    {
+      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unArticle']['LIBELLE'];
+      $this->load->view('templates/Entete');
+      $this->load->view('visiteur/VoirUnArticle', $DonneesInjectees);
+      $this->load->view('templates/PiedDePage');
+    }
+   } // AjouterPanier
+
+   public function ViderPanier()
+   {
+    if($this->input->post('btnajouter'))
+    {
+      $this->cart->destroy();
+    }
+      $this->load->helper('form');
+      $DonneesInjectees['TitreDeLaPage'] = 'Home';
+      $this->load->view('templates/Entete');
+      $this->load->view('visiteur/Home', $DonneesInjectees);
+      $this->load->view('templates/PiedDePage');
+   } // ViderPanier
+
 
    public function Rechercher()
    { 
@@ -143,31 +189,50 @@ class Visiteur extends CI_Controller
 
   public function ModificationUnCompte()
   {
-    $this->load->helper('form');
-    $DonneesInjectees['TitreDeLaPage'] = 'Modifier son Compte';
-    If ($this->input->post('boutonModification'))
+    if ($this->session->statut=="admin"|| $this->session->statut=="user" )
     {
-      $donneesAInserer = array(
-          'NOM' => $this->input->post('Nom'),
-          'PRENOM' => $this->input->post('Prenom'),
-          'ADRESSE' => $this->input->post('Adresse'),
-          'VILLE' => $this->input->post('Ville'),
-          'CODEPOSTAL' => $this->input->post('CodePostal'),
-          'EMAIL' => $this->input->post('Email'),
-          'MOTDEPASSE' => $this->input->post('MotDePasse'),
-      );
-      $id = $this->session->identifiant;
-      $this->ModeleUtilisateur->ModificationUnCompte($donneesAInserer, $id);// appel du modèle
-      $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
-      $this->load->view('templates/Entete');
-      $this->load->view('Visiteur/ModificationUnCompteReussie');
-    }
-    else
-    {
+      $this->load->helper('form');
+      $DonneesInjectees['TitreDeLaPage'] = 'Modifier son Compte';
+      If ($this->input->post('boutonModification'))
+      {
+       $donneesAInserer = array(
+            'NOM' => $this->input->post('Nom'),
+           'PRENOM' => $this->input->post('Prenom'),
+            'ADRESSE' => $this->input->post('Adresse'),
+            'VILLE' => $this->input->post('Ville'),
+            'CODEPOSTAL' => $this->input->post('CodePostal'),
+            'EMAIL' => $this->input->post('Email'),
+           'MOTDEPASSE' => $this->input->post('MotDePasse'),
+        );
+        $id = $this->session->identifiant;
+        $this->ModeleUtilisateur->ModificationUnCompte($donneesAInserer, $id);// appel du modèle
+        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+       $this->load->view('templates/Entete');
+        $this->load->view('Visiteur/ModificationUnCompteReussie');
+      }
+      else
+      {
       $this->load->view('templates/Entete');
       $this->load->view('Visiteur/ModificationUncompte', $DonneesInjectees);
       $this->load->view('templates/PiedDePage');
+      }
     }
-
+    else
+    {
+      $DonneesInjectees['TitreDeLaPage'] = 'Se connecter';
+      $this->load->view('templates/Entete');
+      $this->load->view('visiteur/seConnecter', $DonneesInjectees);
+      $this->load->view('templates/PiedDePage');
+    }
   } // ModificationCompte
+
+  public function panier() 
+  {
+      $this->load->helper('form');
+      $DonneesInjectees['TitreDeLaPage'] = 'Panier';
+        $this->load->view('templates/Entete');
+        $this->load->view('visiteur/Panier', $DonneesInjectees);
+        $this->load->view('templates/PiedDePage');
+   }// Panier
+
 }  // Visiteur

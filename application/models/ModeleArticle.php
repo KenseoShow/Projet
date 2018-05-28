@@ -58,22 +58,29 @@ $this->load->database();
         return $requete->result_array(); // retour d'un tableau associatif
      } //RechercherUnProduit
 
-     function TouteslesCatégories()
+     public function TouteslesCatégories()
     {
         $requete = $this->db->get('categorie');
         return $requete->result_array();
     }
 
-    function TouteslesMarques()
+     public function TouteslesMarques()
     {
         $requete = $this->db->get('marque');
         return $requete->result_array();
     }
 
-    function TouteslesProduits()
+     public function TouteslesProduits()
     {
         $requete = $this->db->get('produit');
         return $requete->result_array();
     }
+    public function retournerarticle($pNoArticle)
+    {
+        $requete = $this->db->get_where('produit', array('NOPRODUIT' => $pNoArticle));
+        return $requete->row_array();
+
+    } //retournerArticle
+
 
 } // Fin Classe
