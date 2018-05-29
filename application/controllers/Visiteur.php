@@ -73,19 +73,38 @@ class Visiteur extends CI_Controller
     }
    } // AjouterPanier
 
-   public function ViderPanier()
+   public function ModifierPanier()
    {
-    if($this->input->post('btnajouter'))
+    $DonneesInjectees['TitreDeLaPage'] = 'Panier';
+    if($this->input->post('btnModifier'))
     {
-      $this->cart->destroy();
-    }
-      $this->load->helper('form');
-      $DonneesInjectees['TitreDeLaPage'] = 'Home';
+      $total= $this->cart->total_items();
+      for ($i = 1; $i <=$total ; $i++)
+      {
+        $donneesamodifier=array(
+          'rowid'=> $this->input->post($i.'[rowid]'),
+          'qty'=> $this->input->post($i.'[qty]')
+        );
+        $this->cart->update($donneesamodifier);
+      }
       $this->load->view('templates/Entete');
-      $this->load->view('visiteur/Home', $DonneesInjectees);
+      $this->load->view('visiteur/Panier', $DonneesInjectees);
       $this->load->view('templates/PiedDePage');
-   } // ViderPanier
+    }
+  } // ModifierPanier
 
+  public function SupprimerPanier($rowid)
+   {
+    $DonneesInjectees['TitreDeLaPage'] = 'Panier';
+    
+    if($this->input->post('btnSupprimer'))
+    {
+      $this->cart->remove($rowid);
+      }
+      $this->load->view('templates/Entete');
+      $this->load->view('visiteur/Panier', $DonneesInjectees);
+      $this->load->view('templates/PiedDePage');
+    } // SupprimerPanier
 
    public function Rechercher()
    { 
@@ -234,5 +253,31 @@ class Visiteur extends CI_Controller
         $this->load->view('visiteur/Panier', $DonneesInjectees);
         $this->load->view('templates/PiedDePage');
    }// Panier
+
+
+   public function listerLesArticlesAvecPagination() 
+   {
+    // les noms des entrées dans $config doivent être respectés
+    $config = array();
+    $config["base_url"] = site_url('visiteur/listerLesArticlesAvecPagination');
+    $config["total_rows"] = $this->ModeleArticle->nombreDArticles();
+    $config["per_page"] = 3; // nombre d'articles par page
+    $config["uri_segment"] = 3; /* le n° de la page sera placé sur le segment n°3 de URI
+    pour la page 4 on aura : visiteur/listerLesArticlesAvecPagination/4   */  
+    $config['first_link'] = 'Premier';
+    $config['last_link'] = 'Dernier';
+    $config['next_link'] = 'Suivant';
+    $config['prev_link'] = 'Précédent';
+    $this->pagination->initialize($config);
+    $noPage = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+    /* on récupère le n° de la page - segment 3 - si ce segment est vide, cas du premier appel
+    de la méthode, on affecte 0 à $noPage */
+    $DonneesInjectees['TitreDeLaPage'] = 'Les articles avec pagination';
+    $DonneesInjectees["lesArticles"] = $this->ModeleArticle->retournerArticlesLimite($config["per_page"], $noPage);
+    $DonneesInjectees["liensPagination"] = $this->pagination->create_links();
+    $this->load->view('templates/Entete');
+    $this->load->view("visiteur/listerLesArticlesAvecPagination", $DonneesInjectees);
+    $this->load->view('templates/PiedDePage');
+ } // fin listerLesArticlesAvecPagination
 
 }  // Visiteur

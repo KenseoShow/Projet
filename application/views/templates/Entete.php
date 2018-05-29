@@ -12,6 +12,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="<?php echo site_url('visiteur/Home') ?>">Page d'acceuil</a>&nbsp;&nbsp;</li>
             <li><a href="<?php echo site_url('visiteur/listerLesArticles') ?>">Lister tous les Articles</a>&nbsp;&nbsp;</li>
+            <li><a href="<?php echo site_url('visiteur/listerLesArticlesAvecPagination') ?>">Lister tous les Articles Pagina</a>&nbsp;&nbsp;</li>
             <li><a href="<?php echo site_url('visiteur/Panier') ?>">Panier</a>&nbsp;&nbsp;</li>
             <?php if ($this->session->statut=="user") : ?>
             <li><a href="<?php echo site_url('Visiteur/ModificationUnCompte')?>">Modifier Compte</a>&nbsp;&nbsp;</li>

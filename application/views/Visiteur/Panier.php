@@ -1,4 +1,4 @@
-<?php echo form_open(''); ?>
+<?php echo form_open('Visiteur/ModifierPanier'); ?>
 <table cellpadding="6" cellspacing="1" style="width:100%" border="0">
 <tr>
         <th>QTY</th>
@@ -23,7 +23,10 @@
                 </td>
                 <td style="text-align:right"><?php echo $this->cart->format_number($items['price']); ?></td>
                 <td style="text-align:right">$<?php echo $this->cart->format_number($items['subtotal']); ?></td>
+                <?php echo form_close(); ?>
+                <?php echo form_open('Visiteur/SupprimerPanier/'.$items['rowid']); ?>
                 <td style="text-align:right"><?php echo form_submit('btnSupprimer', 'Supprimer'); ?></td>
+                <?php echo form_close(); ?>
         </tr>
 <?php $i++; ?>
 <?php endforeach; ?>
@@ -33,4 +36,4 @@
         <td class="right">$<?php echo $this->cart->format_number($this->cart->total()); ?></td>
 </tr>
 </table>
-<p><?php echo form_submit('', 'Update your Cart'); ?></p>
+<p><?php echo form_submit('btnModifier', 'Modifier le panier'); ?></p>
