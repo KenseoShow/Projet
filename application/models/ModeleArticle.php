@@ -100,4 +100,52 @@ $this->load->database();
     { // méthode utilisée pour la pagination
         return $this->db->count_all("produit");
     } // nombreDArticles
+
+    public function insererCommande($pDonneesAInserer)
+     {
+         return $this->db->insert('commande', $pDonneesAInserer);
+     } // insererUneCommande
+
+     public function insererLigne($pDonneesAInserer)
+     {
+         return $this->db->insert('ligne', $pDonneesAInserer);
+     } // insererUneCommande
+
+     public function reducstock($pDonneesAInserer, $id)
+     {
+        $this->db->where('NOPRODUIT', $id);
+        return $this->db->update('produit', $pDonneesAInserer);
+     } // Modifierstock
+
+     public function nombreDecommande() 
+     {
+        $this->db->select_max('NOCOMMANDE');
+        $requete = $this->db->get('commande');
+        return $requete->row(0);
+     } // nombreDeCommande
+
+     public function retournerclient($pNomclient)
+    {
+        $requete = $this->db->get_where('client', array('EMAIL' => $pNomclient));
+        return $requete->row_array();
+
+    } //retournerArticle
+
+    public function TouteslesCommandes($Noproduit)
+    {
+        $requete = $this->db->get('commande');
+        return $requete->result_array();
+    }
+
+    public function nombreenstock($Noproduit)
+    {
+        $this->db->where('NOPRODUIT', $Noproduit);
+        $requete = $this->db->get('produit');
+        return $requete->row_array();
+        /*$this->db->select('QUANTITEENSTOCK');
+        $requete = $this->db->get('produit');
+        return $requete->row(0);*/
+    }
+
+
 } // Fin Classe

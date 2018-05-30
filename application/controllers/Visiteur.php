@@ -73,6 +73,56 @@ class Visiteur extends CI_Controller
     }
    } // AjouterPanier
 
+   public function ValiderPanier()
+   {
+    $DonneesInjectees['TitreDeLaPage'] = 'Panier';
+    if($this->input->post('btnValider'))
+    {
+      $Nomclient= $this->session->identifiant;
+      $Noclient= $this->ModeleArticle->retournerclient($Nomclient)['NOCLIENT'];
+      $insertioncommande=array(
+        'NOCLIENT'=> $Noclient,
+        'DATECOMMANDE' => date("y-m-d h:i:s"),
+      );
+      $this->ModeleArticle->insererCommande($insertioncommande);
+      $Nocommande= $this->ModeleArticle->nombreDecommande()->NOCOMMANDE;
+      
+      
+      if ($panier= $this->cart->contents())
+      {
+        foreach ($panier as $stock)
+        {
+          $id= $stock['id'];
+          $Enstock = $this->ModeleArticle->nombreenstock($id);
+          $insertionligne=array( 
+            'QUANTITEENSTOCK' => $Enstock["QUANTITEENSTOCK"] -  $stock['qty'] 
+          );
+
+          $this->ModeleArticle->reducstock($insertionligne,$id);
+        }
+        foreach ($panier as $objet)
+        {
+          $insertionligne=array(
+            'NOCOMMANDE' => $Nocommande,
+            'NOPRODUIT' => $objet['id'],
+            'QUANTITECOMMANDEE' => $objet['qty']
+          );
+          $this->ModeleArticle->insererLigne($insertionligne);
+        }
+      }
+      
+      $this->load->view('templates/Entete');
+      $this->load->view('visiteur/insertionMarqueReussie');
+      $this->load->view('templates/PiedDePage');
+    }
+    else
+    {
+      $this->load->view('templates/Entete');
+      $this->load->view('visiteur/Panier', $DonneesInjectees);
+      $this->load->view('templates/PiedDePage');
+    }
+   } // AjouterPanier
+
    public function ModifierPanier()
    {
     $DonneesInjectees['TitreDeLaPage'] = 'Panier';
@@ -143,7 +193,7 @@ class Visiteur extends CI_Controller
           'CODEPOSTAL' => $this->input->post('CodePostal'),
           'EMAIL' => $this->input->post('Email'),
           'MOTDEPASSE' => $this->input->post('MotDePasse'),
-          'PROFIL' => 'client',
+          'PROFIL' => 'user',
         );
         $this->ModeleArticle->insererInscription($donneesAInserer); // appel du modèle
         $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
@@ -180,7 +230,7 @@ class Visiteur extends CI_Controller
             $UtilisateurRetourne = $this->ModeleUtilisateur->retournerUtilisateur($Utilisateur);
                 if (!($UtilisateurRetourne == null))
                   {    // on a trouvé, identifiant et statut (droit) sont stockés en session
-                      
+                    
                       $this->session->identifiant = $UtilisateurRetourne->EMAIL;
                       $this->session->statut = $UtilisateurRetourne->PROFIL;
                       $DonneesInjectees['Identifiant'] = $Utilisateur['EMAIL'];
@@ -212,6 +262,7 @@ class Visiteur extends CI_Controller
     {
       $this->load->helper('form');
       $DonneesInjectees['TitreDeLaPage'] = 'Modifier son Compte';
+      $DonneesInjectees['Utilisateur']= $this->ModeleUtilisateur->retournerUtilisateur(array("EMAIL"=> $this->session->identifiant));
       If ($this->input->post('boutonModification'))
       {
        $donneesAInserer = array(

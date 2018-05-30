@@ -7,15 +7,15 @@
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="<?php echo site_url('visiteur/Home') ?>">Manga</a>&nbsp;&nbsp;
+          <a class="navbar-brand" href="<?php echo site_url('visiteur/Home') ?>">Game</a>&nbsp;&nbsp;
         </div>
           <ul class="nav navbar-nav">
             <li class="active"><a href="<?php echo site_url('visiteur/Home') ?>">Page d'acceuil</a>&nbsp;&nbsp;</li>
-            <li><a href="<?php echo site_url('visiteur/listerLesArticles') ?>">Lister tous les Articles</a>&nbsp;&nbsp;</li>
-            <li><a href="<?php echo site_url('visiteur/listerLesArticlesAvecPagination') ?>">Lister tous les Articles Pagina</a>&nbsp;&nbsp;</li>
+            <li><a href="<?php echo site_url('visiteur/listerLesArticles') ?>">Lister tous les articles</a>&nbsp;&nbsp;</li>
+            <li><a href="<?php echo site_url('visiteur/listerLesArticlesAvecPagination') ?>">les articles en pagination</a>&nbsp;&nbsp;</li>
             <li><a href="<?php echo site_url('visiteur/Panier') ?>">Panier</a>&nbsp;&nbsp;</li>
             <?php if ($this->session->statut=="user") : ?>
-            <li><a href="<?php echo site_url('Visiteur/ModificationUnCompte')?>">Modifier Compte</a>&nbsp;&nbsp;</li>
+            <li><a href="<?php echo site_url('Visiteur/ModificationUnCompte')?>">Modifier compte</a>&nbsp;&nbsp;</li>
             <?php endif; ?>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -56,6 +56,10 @@
              </li>
              <li class="nav-item">
                <a class="nav-link disabled" href="<?php echo site_url('Visiteur/ModificationUnCompte')?>">Modifier Compte</a>&nbsp;&nbsp;
+             </li>
+             
+             <li class="nav-item">
+               <a class="nav-link disabled" href="<?php echo site_url('Administrateur/ValidationCommande')?>">Validation des commandes</a>&nbsp;&nbsp;
              </li>
            </ul>
               <?php endif; ?>

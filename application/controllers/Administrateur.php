@@ -159,4 +159,27 @@ class Administrateur extends CI_Controller
         $this->load->view('templates/PiedDePage');
       }
     } // ModificationUnProduit
+
+    public function ValidationCommande()
+    {
+      $this->load->helper('form');
+      $DonneesInjectees['TitreDeLaPage'] = 'Validation commande';
+      $DonneesInjectees['lesCommandes'] = $this->ModeleArticle->TouteslesCommandes();
+      If ($this->input->post('boutonValider'))
+      {
+        $donneesAInserer = array(
+          'DATEAJOUT' => date('y-m-d'),
+        );
+        $this->ModeleArticle->ModificationUnProduit($donneesAInserer, $id);// appel du modèle
+        $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
+        $this->load->view('templates/Entete');
+        $this->load->view('Administrateur/ModificationUnProduitReussie');
+      }
+      else
+      {
+        $this->load->view('templates/Entete');
+        $this->load->view('Administrateur/ValidationCommande', $DonneesInjectees);
+        $this->load->view('templates/PiedDePage');
+      }
+    } // ModificationUnProduit
 }
